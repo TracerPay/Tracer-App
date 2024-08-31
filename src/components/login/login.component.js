@@ -1,0 +1,55 @@
+import React, { useState } from 'react';
+import { useNavigate, Link } from 'react-router-dom'; // Import Link
+import { login } from '../../api/authApi.js';
+
+
+const Login = ({ setUsername }) => {
+  const [localUsername, setLocalUsername] = useState('');
+  const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
+  const navigate = useNavigate();
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const { token } = await login(localUsername, password);
+      localStorage.setItem('authToken', token);
+      localStorage.setItem('username', localUsername);
+      setUsername(localUsername);
+      navigate('/dashboard'); // Redirect to the dashboard after login
+    } catch (error) {
+      setError('Login failed. Please check your credentials.');
+    }
+  };
+
+  return (
+    <div className="login-container">
+      <h2>Login</h2>
+      <form onSubmit={handleSubmit}>
+        <div>
+          <label>Username:</label>
+          <input
+            type="text"
+            value={localUsername}
+            onChange={(e) => setLocalUsername(e.target.value)}
+          />
+        </div>
+        <div>
+          <label>Password:</label>
+          <input
+            type="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+          />
+        </div>
+        {error && <p>{error}</p>}
+        <button type="submit">Login</button>
+      </form>
+      <p>
+        Don't have an account? <Link to="/signup">Sign up here</Link>
+      </p>
+    </div>
+  );
+};
+
+export default Login;

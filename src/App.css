@@ -1,3 +1,63 @@
+/* src/index.css or src/App.css */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap');
+
+:root {
+  --background-color: #FAFAFA;
+  --text-color: #333333;
+  --header-background: #0044CC;
+  --section-background: #FFFFFF;
+  --accent-color: #FF9900;
+  --sidebar-color: #EAEAEA;
+  --separator-color: rgba(0, 0, 0, 0.1);
+  --shadow-color: rgba(0, 0, 0, 0.2);
+  --sidebar-width: 250px; /* Sidebar width */
+}
+
+[data-theme='dark'] {
+  --background-color: #1C1C1C;
+  --text-color: #FAFAFA;
+  --header-background: #001F3F;
+  --section-background: #2C2C2C;
+  --accent-color: #FF9900;
+  --sidebar-color: #1C1C1C;
+  --separator-color: rgba(255, 255, 255, 0.1);
+  --shadow-color: rgba(0, 0, 0, 0.5);
+  --sidebar-width: 250px; /* Sidebar width for dark theme */
+}
+
+/* Global Styles */
+body, html {
+  font-family: 'Inter', sans-serif;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  background-color: var(--background-color);
+  color: var(--text-color);
+}
+
+* {
+  box-sizing: inherit;
+}
+
+.main-content-wrapper {
+  padding: 20px;
+  margin-left: 5%; /* Account for sidebar width */
+}
+
+section {
+  background-color: var(--section-background);
+  color: var(--text-color);
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+p, h1, h2, h3, h4, h5, h6, a, button, input, textarea {
+  letter-spacing: 0.05em; /* Slight letter spacing for better readability */
+}
+
 .App {
   text-align: center;
 }
@@ -14,7 +74,7 @@
 }
 
 .App-header {
-  background-color: #282c34;
+  background-color: var(--header-background);
   min-height: 100vh;
   display: flex;
   flex-direction: column;
@@ -25,7 +85,7 @@
 }
 
 .App-link {
-  color: #61dafb;
+  color: var(--accent-color);
 }
 
 @keyframes App-logo-spin {

@@ -1,0 +1,53 @@
+/* src/components/dashboard/dash.component.css */
+
+.dashboard-container {
+  padding: 20px;
+  background-color: var(--section-background);
+  color: var(--text-color);
+  box-sizing: border-box; /* Ensure padding and margin don't exceed container width */
+}
+
+.dashboard-container h1 {
+  font-size: 2rem;
+  margin-bottom: 20px;
+}
+
+.reports-section {
+  background-color: var(--background-color);
+  border-radius: 8px;
+  padding: 20px;
+  box-shadow: 0 0 10px var(--shadow-color);
+  margin-bottom: 20px; /* Add some spacing below the reports section */
+}
+
+.reports-section ul {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+
+.reports-section li {
+  padding: 10px;
+  border-bottom: 1px solid var(--separator-color);
+  display: flex;
+  align-items: center; /* Vertically align content within list items */
+}
+
+.reports-section li:last-child {
+  border-bottom: none;
+}
+
+.reports-section li:hover {
+  background-color: var(--section-background);
+  transition: background-color 0.3s ease;
+}
+
+.reports-section a {
+  text-decoration: none;
+  color: var(--accent-color);
+  flex-grow: 1;
+}
+
+.reports-section a:hover {
+  text-decoration: underline;
+}
