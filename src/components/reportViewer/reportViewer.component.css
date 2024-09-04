@@ -9,7 +9,8 @@
     box-sizing: border-box; /* Ensure padding and margin do not exceed the container width */
     transition: margin-left 0.3s ease, max-width 0.3s ease; /* Smooth transition for sidebar */
     overflow-x: auto; /* Enable horizontal scrolling if content overflows */
-    max-width: 100%; /* Ensure the viewer fits within the page width */
+    max-width: 80%; /* Ensure the viewer fits within the page width */
+    margin: 0 auto;
 }
 
 .sidebar-open .report-viewer {
@@ -109,6 +110,24 @@ table td {
 
 /* src/components/report-viewer/report-viewer.component.css */
 
+.manage-team-container {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: var(--section-background);
+    color: var(--text-color);
+    border-radius: 8px;
+    box-shadow: 0 0 10px var(--shadow-color);
+    position: relative; /* Ensure the export button can be positioned relative to this container */
+}
+
+.header {
+    display: flex;
+    justify-content: space-between; /* Align items to the left and right */
+    align-items: center;
+    margin-bottom: 20px;
+}
+
 .btn-export {
     padding: 10px 20px;
     background-color: var(--accent-color);
@@ -118,7 +137,7 @@ table td {
     text-decoration: none;
     font-weight: bold;
     cursor: pointer;
-    margin-bottom: 20px;
+    margin-bottom: 0; /* Remove margin bottom to align properly */
     transition: background-color 0.3s ease, transform 0.2s ease;
 }
 

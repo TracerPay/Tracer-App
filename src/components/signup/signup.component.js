@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useNavigate, Link } from 'react-router-dom'; // Import Link
+import { useNavigate, Link } from 'react-router-dom';
 import { signup } from '../../api/authApi.js';
 
 function Signup() {
@@ -32,23 +32,20 @@ function Signup() {
     }
     return { isValid: true };
   };
-  
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Simple client-side validation
     if (password !== confirmPassword) {
       setError('Passwords do not match');
       return;
     }
-    
+
     const { isValid, error: passwordError } = validatePassword(password);
     if (!isValid) {
       setError(passwordError);
       return;
     }
-    
 
     try {
       const user = {
@@ -59,12 +56,9 @@ function Signup() {
         password,
       };
       const response = await signup(user);
-      console.log(response);
       if (response.isDupe) {
-        console.log(response);
         setError('Sorry, that Username already Exists');
       } else if (response.userID) {
-        console.log(response);
         setSuccess(`Signup successful! You can now log in. Welcome ${response.username}.`);
         setError('');
         navigate('/login');
@@ -75,10 +69,12 @@ function Signup() {
   };
 
   return (
-    <div>
+    
+    <div className="auth-page">
+      <div className="auth-container">
       <h2>Signup</h2>
       <form onSubmit={handleSubmit}>
-        <div>
+        <div className="form-group">
           <label>First Name:</label>
           <input
             type="text"
@@ -87,7 +83,7 @@ function Signup() {
             required
           />
         </div>
-        <div>
+        <div className="form-group">
           <label>Last Name:</label>
           <input
             type="text"
@@ -96,7 +92,7 @@ function Signup() {
             required
           />
         </div>
-        <div>
+        <div className="form-group">
           <label>Organization:</label>
           <input
             type="text"
@@ -105,7 +101,7 @@ function Signup() {
             required
           />
         </div>
-        <div>
+        <div className="form-group">
           <label>Username:</label>
           <input
             type="text"
@@ -114,7 +110,7 @@ function Signup() {
             required
           />
         </div>
-        <div>
+        <div className="form-group">
           <label>Password:</label>
           <input
             type="password"
@@ -123,7 +119,7 @@ function Signup() {
             required
           />
         </div>
-        <div>
+        <div className="form-group">
           <label>Confirm Password:</label>
           <input
             type="password"
@@ -132,10 +128,14 @@ function Signup() {
             required
           />
         </div>
-        {error && <p style={{ color: 'red' }}>{error}</p>}
-        {success && <p style={{ color: 'green' }}>{success}</p>}
+        {error && <p className="error-message">{error}</p>}
+        {success && <p className="success-message">{success}</p>}
         <button type="submit">Signup</button>
       </form>
+      <p>
+        Already have an account? <Link to="/login">Login here</Link>
+      </p>
+    </div>
     </div>
   );
 }

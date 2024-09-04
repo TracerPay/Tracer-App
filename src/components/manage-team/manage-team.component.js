@@ -1,24 +1,27 @@
 // src/components/manage-team/manage-team.component.js
 import React, { useState, useEffect } from 'react';
 import './manage-team.component.css';
-import { getUsers, createUser, deleteUser } from '../../api/users.api';
+import { getUsers, createUser, deleteUser, updateUser } from '../../api/users.api';
+import { FaPlus, FaPencilAlt, FaTrashAlt } from 'react-icons/fa';
 
 const ManageTeam = ({ authToken, organizationID }) => {
   const [users, setUsers] = useState([]);
   const [newUser, setNewUser] = useState({ fName: '', lName: '', email: '' });
-  const [newUserCredentials, setNewUserCredentials] = useState(null); // Store generated username and password
+  const [newUserCredentials, setNewUserCredentials] = useState(null);
+  const [editingUser, setEditingUser] = useState(null);
+  const [isPopupOpen, setIsPopupOpen] = useState(false);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
 
   useEffect(() => {
     fetchUsers();
   }, []);
-  
+
   const fetchUsers = async () => {
     try {
       setLoading(true);
       const fetchedUsers = await getUsers(organizationID, authToken);
-      setUsers(fetchedUsers || []); // Ensure it's always an array
+      setUsers(fetchedUsers || []);
       setLoading(false);
     } catch (error) {
       console.error('Error fetching users:', error);
@@ -31,8 +34,9 @@ const ManageTeam = ({ authToken, organizationID }) => {
     try {
       const response = await createUser(organizationID, newUser, authToken);
       setNewUser({ fName: '', lName: '', email: '' });
-      setNewUserCredentials(response); // Store the returned username and password
-      fetchUsers(); // Refresh the users list after adding a new user
+      setNewUserCredentials(response);
+      fetchUsers();
+      setIsPopupOpen(false);
     } catch (error) {
       console.error('Error adding user:', error);
       setError('Failed to add user.');
@@ -43,12 +47,33 @@ const ManageTeam = ({ authToken, organizationID }) => {
     if (window.confirm(`Are you sure you want to remove ${username}?`)) {
       try {
         await deleteUser(organizationID, username, authToken);
-        fetchUsers(); // Refresh the users list after removing a user
+        fetchUsers();
       } catch (error) {
         console.error('Error removing user:', error);
         setError('Failed to remove user.');
       }
     }
+  };
+
+  const handleEditUser = async () => {
+    try {
+      await updateUser(organizationID, editingUser.username, editingUser, authToken);
+      fetchUsers();
+      setEditingUser(null);
+    } catch (error) {
+      console.error('Error updating user:', error);
+      setError('Failed to update user.');
+    }
+  };
+
+  const openEditPopup = (user) => {
+    setEditingUser(user);
+    setIsPopupOpen(true);
+  };
+
+  const openAddPopup = () => {
+    setEditingUser(null);
+    setIsPopupOpen(true);
   };
 
   return (
@@ -58,52 +83,96 @@ const ManageTeam = ({ authToken, organizationID }) => {
       {loading && <p>Loading users...</p>}
       {error && <p className="error-message">{error}</p>}
 
-      <ul className="user-list">
-        {users.map((user, index) => (
-          <li key={index}>
-            <span>{user.fName} {user.lName} ({user.username})</span> {/* Display full name and username */}
-            <span>{user.email}</span> {/* Display email */}
-            {user.isAdmin && <span className="admin-badge">Admin</span>} {/* Display Admin badge if user is an admin */}
-            <button className="delete-button" onClick={() => handleDeleteUser(user.username)}>Remove</button>
-          </li>
-        ))}
-      </ul>
-
-      <h3>Add New User</h3>
-      <div className="form-group">
-        <label>First Name</label>
-        <input
-          type="text"
-          value={newUser.fName}
-          onChange={(e) => setNewUser({ ...newUser, fName: e.target.value })}
-        />
-      </div>
-      <div className="form-group">
-        <label>Last Name</label>
-        <input
-          type="text"
-          value={newUser.lName}
-          onChange={(e) => setNewUser({ ...newUser, lName: e.target.value })}
-        />
-      </div>
-      <div className="form-group">
-        <label>Email</label>
-        <input
-          type="email"
-          value={newUser.email}
-          onChange={(e) => setNewUser({ ...newUser, email: e.target.value })}
-        />
-      </div>
-      <button className="save-button" onClick={handleAddUser}>
-        Add User
+      <button className="add-user-button" onClick={openAddPopup}>
+        <FaPlus /> Add User
       </button>
 
-      {newUserCredentials && (
-        <div className="new-user-credentials">
-          <h4>New User Credentials</h4>
-          <p>Username: {newUserCredentials.username}</p>
-          <p>Password: {newUserCredentials.password}</p>
-        </div>
+      <table className="user-table">
+        <thead>
+          <tr>
+            <th>Full Name</th>
+            <th>Email</th>
+            <th>Role</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {users && users.length > 0 ? (
+            users.map((user, index) => (
+              <tr key={index}>
+                <td>{user.fName} {user.lName}</td>
+                <td>{user.email}</td>
+                <td>{user.isAdmin ? 'Admin' : 'User'}</td>
+                <td className="table-actions">
+                  <button className="action-button edit" onClick={() => openEditPopup(user)}>
+                    <FaPencilAlt />
+                  </button>
+                  <button className="action-button delete" onClick={() => handleDeleteUser(user.username)}>
+                    <FaTrashAlt />
+                  </button>
+                </td>
+              </tr>
+            ))
+          ) : (
+            <tr>
+              <td colSpan="4">No users found.</td>
+            </tr>
+          )}
+        </tbody>
+      </table>
+
+      {isPopupOpen && (
+        <>
+          <div className="popup-overlay" onClick={() => setIsPopupOpen(false)}></div>
+          <div className="popup-container">
+            <h3>{editingUser ? 'Edit User' : 'Add New User'}</h3>
+            <div className="form-group">
+              <label>First Name</label>
+              <input
+                type="text"
+                value={editingUser ? editingUser.fName : newUser.fName}
+                onChange={(e) => editingUser
+                  ? setEditingUser({ ...editingUser, fName: e.target.value })
+                  : setNewUser({ ...newUser, fName: e.target.value })}
+              />
+            </div>
+            <div className="form-group">
+              <label>Last Name</label>
+              <input
+                type="text"
+                value={editingUser ? editingUser.lName : newUser.lName}
+                onChange={(e) => editingUser
+                  ? setEditingUser({ ...editingUser, lName: e.target.value })
+                  : setNewUser({ ...newUser, lName: e.target.value })}
+              />
+            </div>
+            <div className="form-group">
+              <label>Email</label>
+              <input
+                type="email"
+                value={editingUser ? editingUser.email : newUser.email}
+                onChange={(e) => editingUser
+                  ? setEditingUser({ ...editingUser, email: e.target.value })
+                  : setNewUser({ ...newUser, email: e.target.value })}
+              />
+            </div>
+            {editingUser && (
+              <div className="form-group">
+                <label>Role</label>
+                <select
+                  value={editingUser.isAdmin ? 'Admin' : 'User'}
+                  onChange={(e) => setEditingUser({ ...editingUser, isAdmin: e.target.value === 'Admin' })}
+                >
+                  <option value="User">User</option>
+                  <option value="Admin">Admin</option>
+                </select>
+              </div>
+            )}
+            <button className="save-button" onClick={editingUser ? handleEditUser : handleAddUser}>
+              {editingUser ? 'Save Changes' : 'Add User'}
+            </button>
+          </div>
+        </>
       )}
     </div>
   );

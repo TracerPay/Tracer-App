@@ -10,6 +10,7 @@ export const getUsers = async (organizationID, authToken) => {
         };
         const response = await axios.get(`${API_BASE_URL}/users/organizations/${organizationID}`, { headers });
         console.log('Users:', response.data);
+        return response.data;
     } catch (error) {
         console.error('Error fetching users:', error);
         throw error.response?.data || error.message;

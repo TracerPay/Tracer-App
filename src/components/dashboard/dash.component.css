@@ -1,10 +1,14 @@
 /* src/components/dashboard/dash.component.css */
 
 .dashboard-container {
+  max-width: 80%;
+  margin: 0 auto;
   padding: 20px;
   background-color: var(--section-background);
   color: var(--text-color);
-  box-sizing: border-box; /* Ensure padding and margin don't exceed container width */
+  border-radius: 8px;
+  box-shadow: 0 0 10px var(--shadow-color);
+  box-sizing: border-box; /* Ensure padding and margin do not exceed the container width */
 }
 
 .dashboard-container h1 {

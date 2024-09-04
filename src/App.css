@@ -1,6 +1,3 @@
-/* src/index.css or src/App.css */
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap');
-
 :root {
   --background-color: #FAFAFA;
   --text-color: #333333;
@@ -10,7 +7,8 @@
   --sidebar-color: #EAEAEA;
   --separator-color: rgba(0, 0, 0, 0.1);
   --shadow-color: rgba(0, 0, 0, 0.2);
-  --sidebar-width: 250px; /* Sidebar width */
+  --sidebar-width: 250px;
+  --sidebar-closed-width: 60px; /* Width when sidebar is closed */
 }
 
 [data-theme='dark'] {
@@ -22,7 +20,8 @@
   --sidebar-color: #1C1C1C;
   --separator-color: rgba(255, 255, 255, 0.1);
   --shadow-color: rgba(0, 0, 0, 0.5);
-  --sidebar-width: 250px; /* Sidebar width for dark theme */
+  --sidebar-width: 250px;
+  --sidebar-closed-width: 60px; /* Width when sidebar is closed */
 }
 
 /* Global Styles */
@@ -33,31 +32,123 @@ body, html {
   box-sizing: border-box;
   background-color: var(--background-color);
   color: var(--text-color);
+  height: 100%;
 }
 
 * {
   box-sizing: inherit;
 }
 
-.main-content-wrapper {
+/* Set max-width for all pages */
+.page-content {
+  max-width: 80%;
+  margin: 0 auto; /* Center the content horizontally */
   padding: 20px;
-  margin-left: 5%; /* Account for sidebar width */
+  transition: margin-left 0.3s ease;
 }
 
+/* Adjust page-content based on sidebar state */
+.sidebar.open ~ .page-content {
+  margin-left: var(--sidebar-width); /* When sidebar is open */
+}
+
+.sidebar:not(.open) ~ .page-content {
+  margin-left: var(--sidebar-closed-width); /* When sidebar is closed */
+}
+
+/* Main content wrapper for general padding */
+.main-content-wrapper {
+  padding: 20px;
+}
+
+/* Section styling */
 section {
   background-color: var(--section-background);
   color: var(--text-color);
 }
 
+/* Authentication pages styling */
+.auth-page {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.auth-container {
+  width: 100%;
+  max-width: 400px;
+  padding: 30px;
+  background-color: #f7f7f7;
+  border-radius: 10px;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+  text-align: center;
+}
+
+.auth-container h2 {
+  margin-bottom: 20px;
+  font-size: 24px;
+  color: #333;
+}
+
+.auth-container .form-group {
+  margin-bottom: 15px;
+  text-align: left;
+}
+
+.auth-container label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: bold;
+  color: #333;
+}
+
+.auth-container input {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  font-size: 14px;
+}
+
+.auth-container button {
+  width: 100%;
+  padding: 10px;
+  background-color: #f7941d;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: bold;
+}
+
+.auth-container button:hover {
+  background-color: #e68a00;
+}
+
+.auth-container p {
+  margin-top: 15px;
+  color: #555;
+}
+
+.auth-container .error-message {
+  color: red;
+  margin-bottom: 15px;
+}
+
+/* Link styles */
 a {
   text-decoration: none;
   color: inherit;
 }
 
+/* Typographic consistency */
 p, h1, h2, h3, h4, h5, h6, a, button, input, textarea {
-  letter-spacing: 0.05em; /* Slight letter spacing for better readability */
+  letter-spacing: 0.05em;
 }
 
+/* App wrapper styles */
 .App {
   text-align: center;
 }

@@ -1,6 +1,8 @@
 /* src/components/billing-reports/billing-reports.component.css */
 
 .billing-reports {
+    max-width: 80%;
+    margin: 0 auto;
     padding: 20px;
     background-color: var(--section-background);
     color: var(--text-color);

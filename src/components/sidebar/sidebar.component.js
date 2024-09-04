@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import './sidebar.component.css';
-import { FaHome, FaUserShield, FaFileUpload, FaFileAlt, FaChevronDown, FaCog, FaDashcube } from 'react-icons/fa';
+import { FaHome, FaFileAlt, FaChevronDown, FaCog } from 'react-icons/fa';
 import { AiFillDashboard } from "react-icons/ai";
 
 const Sidebar = ({ username, isAdmin, onLogout }) => {

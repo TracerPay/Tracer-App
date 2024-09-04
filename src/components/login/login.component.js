@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom'; // Import Link
 import { login } from '../../api/authApi.js';
 
-
 const Login = ({ setUsername }) => {
   const [localUsername, setLocalUsername] = useState('');
   const [password, setPassword] = useState('');
@@ -23,10 +22,12 @@ const Login = ({ setUsername }) => {
   };
 
   return (
-    <div className="login-container">
+    
+    <div className="auth-page">
+      <div className="auth-container">
       <h2>Login</h2>
       <form onSubmit={handleSubmit}>
-        <div>
+        <div className="form-group">
           <label>Username:</label>
           <input
             type="text"
@@ -34,7 +35,7 @@ const Login = ({ setUsername }) => {
             onChange={(e) => setLocalUsername(e.target.value)}
           />
         </div>
-        <div>
+        <div className="form-group">
           <label>Password:</label>
           <input
             type="password"
@@ -42,12 +43,13 @@ const Login = ({ setUsername }) => {
             onChange={(e) => setPassword(e.target.value)}
           />
         </div>
-        {error && <p>{error}</p>}
+        {error && <p className="error-message">{error}</p>}
         <button type="submit">Login</button>
       </form>
       <p>
         Don't have an account? <Link to="/signup">Sign up here</Link>
       </p>
+    </div>
     </div>
   );
 };

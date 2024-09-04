@@ -66,13 +66,15 @@ const ReportViewer = ({ authToken, isSidebarOpen }) => {
 
     return (
         <div className={isSidebarOpen ? "sidebar-open report-viewer" : "sidebar-closed report-viewer"}>
-            <h2>Report Details</h2>
+                    <header className='header'>
+
+            {report.type === 'billing' ? <h1>Billing Report</h1> : <h1>AR Report</h1>}
+                    <button onClick={exportToCSV} className="btn-export">Export to CSV</button>
+                    </header>
             {report ? (
                 <>
                     <p><strong>Month:</strong> {report.month}</p>
                     <p><strong>Processor:</strong> {report.processor}</p>
-                    <h3>Details</h3>
-                    <button onClick={exportToCSV} className="btn-export">Export to CSV</button>
                     <div className="table-container">
                         <table>
                             <thead>
