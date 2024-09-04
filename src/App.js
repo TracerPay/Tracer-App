@@ -58,7 +58,7 @@ function App() {
             <Route path="/signup" element={<Signup />} />
             {username ? (
               <>
-                <Route path="/dashboard" element={<Dashboard />} />
+                <Route path="/dashboard" element={<Dashboard organizationID={organizationID} username={username} authToken={authToken} />} />
                 <Route path="/admin-dashboard" element={<Dashboard username={username} authToken={authToken} />} />
                 <Route path="/upload-report" element={<ReportUpload authToken={authToken} organizationID={organizationID} />} />
                 <Route path="/billing-reports" element={<BillingReports authToken={authToken} organizationID={organizationID} />} />
