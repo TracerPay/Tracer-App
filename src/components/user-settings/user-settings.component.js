@@ -1,18 +1,29 @@
-// src/components/user-settings/user-settings.component.js
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import { updateUser } from '../../api/users.api';
 import './user-settings.component.css';
 
-const UserSettings = ({ username, email, onUpdateProfile, onChangePassword, onThemeToggle, theme, isAdmin }) => {
+const UserSettings = ({ organizationID, username, email, onUpdateProfile, onChangePassword, isAdmin }) => {
   const [newUsername, setNewUsername] = useState(username);
   const [newEmail, setNewEmail] = useState(email);
   const [currentPassword, setCurrentPassword] = useState('');
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [isChangePasswordVisible, setIsChangePasswordVisible] = useState(false);
+  const [showManageTeam, setShowManageTeam] = useState(isAdmin);
+
+  useEffect(() => {
+    // Ensure showManageTeam gets updated as soon as isAdmin changes
+    setShowManageTeam(isAdmin);
+  }, [isAdmin]);
 
   const handleProfileUpdate = () => {
     onUpdateProfile(newUsername, newEmail);
+    const updatedUser = {
+      username: newUsername,
+      email: newEmail,
+    };
+    updateUser(username, updatedUser);
   };
 
   const handleChangePassword = () => {
@@ -86,7 +97,7 @@ const UserSettings = ({ username, email, onUpdateProfile, onChangePassword, onTh
         </>
       )}
 
-      {isAdmin && (
+      {showManageTeam && (
         <div className="manage-users-link">
           <Link to="/manage-team" className="manage-team-button">
             Manage Team

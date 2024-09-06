@@ -53,7 +53,7 @@ function App() {
           <Routes>
             <Route
               path="/"
-              element={username ? <Navigate to="/dashboard" /> : <Login setUsername={setUsername} />}
+              element={username ? <Navigate to="/dashboard" /> : <Login setUsername={setUsername} setAuthToken={setAuthToken} />}
             />
             <Route path="/signup" element={<Signup />} />
             {username ? (
@@ -64,7 +64,7 @@ function App() {
                 <Route path="/billing-reports" element={<BillingReports authToken={authToken} organizationID={organizationID} />} />
                 <Route path="/ar-reports" element={<ARReports authToken={authToken} organizationID={organizationID} />} />
                 <Route path="/report/:reportID" element={<ReportViewer authToken={authToken} reportType="billing" />} />
-                <Route path='/user-settings/:username' element={<UserSettings username={username} authToken={authToken} isAdmin={isAdmin} />} />
+                <Route path='/user-settings/:username' element={<UserSettings organizationID={organizationID} username={username} authToken={authToken} isAdmin={isAdmin} />} />
                 <Route path="/manage-team" element={<ManageTeam authToken={authToken} organizationID={organizationID} />} />
 
               </>

@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_BASE_URL = 'http://localhost:3001/api/v1';
+const API_BASE_URL = process.env.REACT_APP_BASE_URL;
 
 export const addReport = async (organizationID, reportData, authToken) => {
   try {
@@ -40,4 +40,17 @@ export const getReportById = async ( reportID, authToken) => {
       console.error("Error fetching report:", error);
       throw error.response?.data || error.message;
   }
+};
+
+export const deleteReport = async (reportID, authToken) => {
+  try {
+    const headers = {
+      Authorization: `Bearer ${authToken}`
+    }
+    const response = await axios.delete(`${API_BASE_URL}/reports/${reportID}`, { headers });
+    return response.data;
+    } catch (error) {
+      console.error("Error deleting report:", error);
+      throw error.response?.data || error.message;
+    }
 };

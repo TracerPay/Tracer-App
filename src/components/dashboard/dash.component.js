@@ -4,9 +4,10 @@ import './dash.component.css';
 import { useNavigate } from 'react-router-dom';
 
 const Dashboard = ({ organizationID, username, authToken }) => {
-  const [recentTransactions, setRecentTransactions] = useState(() => localStorage.getItem('recentTransactions') || 0);
-  const [recentBilled, setRecentBilled] = useState(() => localStorage.getItem('recentBilled') || 0);
-  const [reportMonth, setReportMonth] = useState(() => localStorage.getItem('reportMonth') || '');
+  const [recentTransactions, setRecentTransactions] = useState(null); // Set to null initially
+  const [recentBilled, setRecentBilled] = useState(null); // Set to null initially
+  const [reportMonth, setReportMonth] = useState(null); // Set to null initially
+  const [loading, setLoading] = useState(true); // Loading state
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -37,6 +38,7 @@ const Dashboard = ({ organizationID, username, authToken }) => {
         localStorage.setItem('recentBilled', totalBilled);
         localStorage.setItem('reportMonth', mostRecentReport.month);
       }
+      setLoading(false); // Stop loading after fetching
     };
   
     fetchReports();
@@ -51,18 +53,24 @@ const Dashboard = ({ organizationID, username, authToken }) => {
     <div className="dashboard-container">
       <h1>Welcome, {username}</h1>
 
-      {reportMonth && <h2>Statistics for {reportMonth}</h2>} {/* Display the month */}
+      {loading ? (
+        <p>Loading statistics...</p> // Show a loading state while fetching
+      ) : (
+        <>
+          {reportMonth && <h2>Statistics for {reportMonth}</h2>} {/* Display the month */}
 
-      <div className="metrics-section">
-        <div className="metric">
-          <h3>Total Transactions</h3>
-          <p>{recentTransactions}</p>
-        </div>
-        <div className="metric">
-          <h3>Total Billed</h3>
-          <p>${recentBilled}</p>
-        </div>
-      </div>
+          <div className="metrics-section">
+            <div className="metric">
+              <h3>Total Transactions</h3>
+              <p>{recentTransactions !== null ? recentTransactions : 'N/A'}</p> {/* Show N/A if null */}
+            </div>
+            <div className="metric">
+              <h3>Total Billed</h3>
+              <p>{recentBilled !== null ? `$${recentBilled}` : 'N/A'}</p> {/* Show N/A if null */}
+            </div>
+          </div>
+        </>
+      )}
 
       <div className="upload-section">
         <h2>Upload a New Report</h2>

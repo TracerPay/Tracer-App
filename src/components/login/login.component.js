@@ -2,24 +2,29 @@ import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom'; // Import Link
 import { login } from '../../api/authApi.js';
 
-const Login = ({ setUsername }) => {
+const Login = ({ setUsername, setAuthToken }) => {
   const [localUsername, setLocalUsername] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const navigate = useNavigate();
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    try {
-      const { token } = await login(localUsername, password);
-      localStorage.setItem('authToken', token);
-      localStorage.setItem('username', localUsername);
-      setUsername(localUsername);
-      navigate('/dashboard'); // Redirect to the dashboard after login
-    } catch (error) {
-      setError('Login failed. Please check your credentials.');
-    }
-  };
+const handleSubmit = async (e) => {
+  e.preventDefault();
+  try {
+    const { token } = await login(localUsername, password);
+    localStorage.setItem('authToken', token);
+    localStorage.setItem('username', localUsername);
+
+    // Update state for authToken and username
+    setAuthToken(token);
+    setUsername(localUsername);
+    navigate('/dashboard'); // Redirect to the dashboard after login
+  } catch (error) {
+    console.error('Login failed:', error); // Add this line
+    setError('Login failed. Please check your credentials.');
+  }
+};
+
 
   return (
     

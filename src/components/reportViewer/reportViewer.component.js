@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { getReportById } from '../../api/reports.api';
+import { getReportById, deleteReport } from '../../api/reports.api';
 import './reportViewer.component.css';
 
 const ReportViewer = ({ authToken, isSidebarOpen }) => {
@@ -57,6 +57,15 @@ const ReportViewer = ({ authToken, isSidebarOpen }) => {
         document.body.removeChild(a);
     };
 
+    const deleteReport = async () => {
+        try {
+            await deleteReport(reportID, authToken);
+            window.location.href = '/reports';
+        } catch (err) {
+            console.error(err);
+        }
+    };
+
     if (status.loading) return <p>Loading...</p>;
     if (status.error) return <p>{status.error}</p>;
 
@@ -65,7 +74,7 @@ const ReportViewer = ({ authToken, isSidebarOpen }) => {
         : [];
 
     return (
-        <div className={isSidebarOpen ? "sidebar-open report-viewer" : "sidebar-closed report-viewer"}>
+        <div className='report-viewer'>
                     <header className='header'>
 
             {report.type === 'billing' ? <h1>Billing Report</h1> : <h1>AR Report</h1>}

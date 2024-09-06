@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { FaEye, FaTrash } from 'react-icons/fa';
 import { Link, useNavigate } from 'react-router-dom';
 import './billing-reports.component.css'; // Create this CSS file for styling
-import { getReports } from '../../api/reports.api';
+import { getReports, deleteReport } from '../../api/reports.api';
 import ReportViewer from '../reportViewer/reportViewer.component';
 
 const BillingReports = ({ authToken, organizationID }) => {
@@ -11,12 +11,15 @@ const BillingReports = ({ authToken, organizationID }) => {
     const [filterMonth, setFilterMonth] = useState('');
     const [filterYear, setFilterYear] = useState('');
     const [currentPage, setCurrentPage] = useState(1);
+    const [loading, setLoading] = useState(true); // Loading state to track data fetching
     const reportsPerPage = 10;
     const navigate = useNavigate(); // Initialize the useNavigate hook
 
     useEffect(() => {
-        fetchBillingReports();
-    }, []);
+        if (authToken && organizationID) {
+            fetchBillingReports();
+        }
+    }, [authToken, organizationID]); // Fetch reports only when both are available
 
     useEffect(() => {
         filterReports();
@@ -24,11 +27,14 @@ const BillingReports = ({ authToken, organizationID }) => {
 
     const fetchBillingReports = async () => {
         try {
+            setLoading(true); // Set loading to true before fetching
             const data = await getReports(organizationID, 'billing', authToken);
             setReports(data);
             setFilteredReports(data);
         } catch (error) {
             console.error('Error fetching billing reports:', error);
+        } finally {
+            setLoading(false); // Stop loading after data is fetched
         }
     };
 
@@ -51,10 +57,10 @@ const BillingReports = ({ authToken, organizationID }) => {
         navigate(`/report/${reportID}`);
     };
 
-    const handleDelete = async (id) => {
+    const handleDelete = async (reportID) => {
         try {
-            await fetch(`/api/billing-reports/${id}`, { method: 'DELETE' });
-            setReports(reports.filter(report => report.id !== id));
+            await deleteReport(reportID, authToken);
+            setReports(reports.filter(report => report.reportID !== reportID));
         } catch (error) {
             console.error('Error deleting report:', error);
         }
@@ -66,6 +72,10 @@ const BillingReports = ({ authToken, organizationID }) => {
     const currentReports = filteredReports.slice(indexOfFirstReport, indexOfLastReport);
 
     const paginate = (pageNumber) => setCurrentPage(pageNumber);
+
+    if (loading) {
+        return <div className="billing-reports"><p>Loading...</p></div>; // Display loading state
+    }
 
     return (
         <div className="billing-reports">
@@ -115,7 +125,7 @@ const BillingReports = ({ authToken, organizationID }) => {
                                 <button className="btn-view" onClick={() => handleView(report.reportID)}>
                                     <FaEye />
                                 </button>
-                                <button className="btn-delete" onClick={() => handleDelete(report.id)}>
+                                <button className="btn-delete" onClick={() => handleDelete(report.reportID)}>
                                     <FaTrash />
                                 </button>
                             </td>

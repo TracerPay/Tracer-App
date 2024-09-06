@@ -1,6 +1,4 @@
 .dashboard-container {
-  max-width: 80%;
-  margin: auto;
   padding: 20px;
   background-color: var(--section-background);
   color: var(--text-color);
@@ -65,9 +63,7 @@
   transition: background-color 0.3s ease;
 }
 
-.upload-section button:hover {
-  background-color: var(--hover-accent-color);
-}
+
 
 .upload-section p {
   margin-top: 10px;
@@ -116,6 +112,4 @@
   flex-grow: 1;
 }
 
-.reports-section a:hover {
-  text-decoration: underline;
-}
+

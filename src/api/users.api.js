@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_BASE_URL = 'http://localhost:3001/api/v1'; // Update this to your API's base URL
+const API_BASE_URL = process.env.REACT_APP_BASE_URL; // Update this to your API's base URL
 
 // Fetch user details by organizationID and username
 export const getUsers = async (organizationID, authToken) => {

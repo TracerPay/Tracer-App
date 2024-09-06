@@ -1,73 +1,83 @@
+/* Root variables for light theme */
 :root {
   --background-color: #FAFAFA;
   --text-color: #333333;
   --header-background: #0044CC;
   --section-background: #FFFFFF;
-  --accent-color: #FF9900;
+  --accent-color: #FF9900; /* Primary accent color */
+  --accent-color2: #ff7800; /* Secondary accent color */
   --sidebar-color: #EAEAEA;
-  --separator-color: rgba(0, 0, 0, 0.1);
-  --shadow-color: rgba(0, 0, 0, 0.2);
-  --sidebar-width: 250px;
-  --sidebar-closed-width: 60px; /* Width when sidebar is closed */
+  --separator-color: rgba(0, 0, 0, 0.1); /* Light separator for table and layout elements */
+  --shadow-color: rgba(0, 0, 0, 0.2); /* Shadow for elements */
+  --sidebar-width: 250px; /* Sidebar open width */
+  --sidebar-closed-width: 60px; /* Sidebar closed width */
 }
 
+/* Root variables for dark theme */
 [data-theme='dark'] {
   --background-color: #1C1C1C;
   --text-color: #FAFAFA;
   --header-background: #001F3F;
   --section-background: #2C2C2C;
-  --accent-color: #FF9900;
+  --accent-color: #FF9900; /* Same accent color for dark theme */
+  --accent-color2: #ff7800; /* Same secondary accent color */
   --sidebar-color: #1C1C1C;
-  --separator-color: rgba(255, 255, 255, 0.1);
-  --shadow-color: rgba(0, 0, 0, 0.5);
-  --sidebar-width: 250px;
-  --sidebar-closed-width: 60px; /* Width when sidebar is closed */
+  --separator-color: rgba(255, 255, 255, 0.1); /* Light separator for dark theme */
+  --shadow-color: rgba(0, 0, 0, 0.5); /* Darker shadow for dark theme */
+  --sidebar-width: 250px; /* Sidebar open width (dark theme) */
+  --sidebar-closed-width: 60px; /* Sidebar closed width (dark theme) */
 }
 
 /* Global Styles */
-body, html {
+
+/* Ensure base font styles and reset margin/padding */
+body,
+html {
   font-family: 'Inter', sans-serif;
   margin: 0;
   padding: 0;
   box-sizing: border-box;
   background-color: var(--background-color);
   color: var(--text-color);
-  height: 100%;
+  min-height: 100%; /* Ensure the body expands based on content */
 }
 
+/* Set box-sizing globally */
 * {
   box-sizing: inherit;
 }
 
-/* Set max-width for all pages */
-.page-content {
+/* Container for the main application */
+.app-container {
   max-width: 80%;
   margin: 0 auto; /* Center the content horizontally */
   padding: 20px;
   transition: margin-left 0.3s ease;
+  min-height: 100vh; /* Ensure full viewport height */
+  height: auto; /* Expand height based on content */
 }
 
-/* Adjust page-content based on sidebar state */
-.sidebar.open ~ .page-content {
-  margin-left: var(--sidebar-width); /* When sidebar is open */
+/* Adjust main content position when sidebar is open/closed */
+.sidebar.open~.page-content {
+  margin-left: var(--sidebar-width); /* Adjust margin when sidebar is open */
 }
 
-.sidebar:not(.open) ~ .page-content {
-  margin-left: var(--sidebar-closed-width); /* When sidebar is closed */
+.sidebar:not(.open)~.page-content {
+  margin-left: var(--sidebar-closed-width); /* Adjust margin when sidebar is closed */
 }
 
-/* Main content wrapper for general padding */
+/* Main content wrapper */
 .main-content-wrapper {
   padding: 20px;
 }
 
-/* Section styling */
+/* Section styling for consistency across pages */
 section {
   background-color: var(--section-background);
   color: var(--text-color);
 }
 
-/* Authentication pages styling */
+/* Authentication Page Styling */
 .auth-page {
   display: flex;
   justify-content: center;
@@ -79,16 +89,17 @@ section {
   width: 100%;
   max-width: 400px;
   padding: 30px;
-  background-color: #f7f7f7;
+  background-color: var(--section-background);
   border-radius: 10px;
   box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
   text-align: center;
 }
 
+/* Auth Container Headings */
 .auth-container h2 {
   margin-bottom: 20px;
   font-size: 24px;
-  color: #333;
+  color: var(--text-color);
 }
 
 .auth-container .form-group {
@@ -100,7 +111,7 @@ section {
   display: block;
   margin-bottom: 5px;
   font-weight: bold;
-  color: #333;
+  color: var(--text-color);
 }
 
 .auth-container input {
@@ -111,10 +122,11 @@ section {
   font-size: 14px;
 }
 
+/* Button styling for auth container */
 .auth-container button {
   width: 100%;
   padding: 10px;
-  background-color: #f7941d;
+  background-color: var(--accent-color2);
   color: white;
   border: none;
   border-radius: 5px;
@@ -124,46 +136,93 @@ section {
 }
 
 .auth-container button:hover {
-  background-color: #e68a00;
+  background-color: var(--accent-color2); /* Secondary accent color on hover */
 }
 
+/* Paragraph styling in auth container */
 .auth-container p {
   margin-top: 15px;
   color: #555;
 }
 
+/* Error message styling */
 .auth-container .error-message {
   color: red;
   margin-bottom: 15px;
 }
 
-/* Link styles */
+/* General link styles */
 a {
   text-decoration: none;
   color: inherit;
 }
 
-/* Typographic consistency */
-p, h1, h2, h3, h4, h5, h6, a, button, input, textarea {
+/* Typographic consistency across elements */
+p,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+a,
+button,
+input,
+textarea {
   letter-spacing: 0.05em;
 }
 
-/* App wrapper styles */
+/* Application wrapper styles */
 .App {
   text-align: center;
 }
 
+/* App logo animation */
 .App-logo {
   height: 40vmin;
   pointer-events: none;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
+/* Global button hover state */
+button,
+a,
+input[type="submit"] {
+  transition: background-color 0.3s ease;
+}
+
+button:hover,
+a:hover,
+input[type="submit"]:hover {
+  background-color: var(--accent-color2); /* Secondary accent color on hover */
+}
+
+.btn-view, .btn-delete {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 1.2rem;
+}
+
+.btn-view {
+  color: var(--accent-color);
+}
+
+.btn-delete {
+  color: red;
+}
+
+
+/* App logo keyframe animation */
+@keyframes App-logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
   }
 }
 
+/* Header styling */
 .App-header {
   background-color: var(--header-background);
   min-height: 100vh;
@@ -175,15 +234,67 @@ p, h1, h2, h3, h4, h5, h6, a, button, input, textarea {
   color: white;
 }
 
+/* Link styles in header */
 .App-link {
   color: var(--accent-color);
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
+/* Pagination */
+.pagination {
+  margin-top: 20px;
+  display: flex;
+  justify-content: center;
+}
+
+.pagination button {
+  margin: 0 5px;
+  padding: 5px 10px;
+  border: 1px solid var(--separator-color);
+  background-color: var(--background-color);
+  color: var(--text-color);
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+.pagination .active {
+  background-color: var(--accent-color);
+  color: white;
+  border-color: var(--accent-color);
+}
+
+/* Table */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  background-color: var(--background-color);
+  color: var(--text-color);
+}
+
+table th, table td {
+  padding: 10px;
+  border: 1px solid var(--separator-color);
+  text-align: left;
+}
+
+table th {
+  background-color: var(--section-background);
+}
+
+table td {
+  background-color: var(--background-color);
+}
+
+
+/* Filters styling for form-like elements */
+.filters {
+  display: flex;
+  margin-bottom: 20px;
+  gap: 10px;
+}
+
+/* Ensure smooth animation for elements with reduced motion */
+@media (prefers-reduced-motion: no-preference) {
+  .App-logo {
+    animation: App-logo-spin infinite 20s linear;
   }
 }

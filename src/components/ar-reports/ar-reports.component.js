@@ -1,10 +1,8 @@
-// src/components/ar-reports/ar-reports.component.js
-
 import React, { useState, useEffect } from 'react';
 import { FaEye, FaTrash } from 'react-icons/fa';
 import { Link, useNavigate } from 'react-router-dom';
 import './ar-reports.component.css';
-import { getReports } from '../../api/reports.api';
+import { getReports, deleteReport } from '../../api/reports.api';
 
 const ARReports = ({ authToken, organizationID }) => {
     const [reports, setReports] = useState([]);
@@ -13,7 +11,7 @@ const ARReports = ({ authToken, organizationID }) => {
     const [filterYear, setFilterYear] = useState('');
     const [currentPage, setCurrentPage] = useState(1);
     const reportsPerPage = 10;
-    const navigate = useNavigate(); // Initialize useNavigate hook
+    const navigate = useNavigate();
 
     useEffect(() => {
         fetchARReports();
@@ -49,20 +47,18 @@ const ARReports = ({ authToken, organizationID }) => {
     };
 
     const handleView = (id) => {
-        // Navigate to the report viewer page
         navigate(`/report/${id}`);
     };
 
-    const handleDelete = async (id) => {
+    const handleDelete = async (reportID) => {
         try {
-            await fetch(`/api/ar-reports/${id}`, { method: 'DELETE' });
-            setReports(reports.filter(report => report.id !== id));
+            await deleteReport(reportID, authToken);
+            setReports(reports.filter(report => report.reportID !== reportID));
         } catch (error) {
             console.error('Error deleting report:', error);
         }
     };
 
-    // Pagination logic
     const indexOfLastReport = currentPage * reportsPerPage;
     const indexOfFirstReport = indexOfLastReport - reportsPerPage;
     const currentReports = filteredReports.slice(indexOfFirstReport, indexOfLastReport);
@@ -77,18 +73,10 @@ const ARReports = ({ authToken, organizationID }) => {
             <div className="filters">
                 <select value={filterMonth} onChange={(e) => setFilterMonth(e.target.value)}>
                     <option value="">All Months</option>
-                    <option value="January">January</option>
-                    <option value="February">February</option>
-                    <option value="March">March</option>
-                    <option value="April">April</option>
-                    <option value="May">May</option>
-                    <option value="June">June</option>
-                    <option value="July">July</option>
-                    <option value="August">August</option>
-                    <option value="September">September</option>
-                    <option value="October">October</option>
-                    <option value="November">November</option>
-                    <option value="December">December</option>
+                    {/* Loop through months */}
+                    {['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'].map(month => (
+                        <option value={month} key={month}>{month}</option>
+                    ))}
                 </select>
                 <input
                     type="number"
@@ -106,33 +94,41 @@ const ARReports = ({ authToken, organizationID }) => {
                     </tr>
                 </thead>
                 <tbody>
-                    {currentReports.map((report) => (
-                        <tr key={report.reportID}>
-                            <td>{report.month}</td>
-                            <td>{report.processor}</td>
-                            <td>
-                                <button className="btn-view" onClick={() => handleView(report.reportID)}>
-                                    <FaEye />
-                                </button>
-                                <button className="btn-delete" onClick={() => handleDelete(report.reportID)}>
-                                    <FaTrash />
-                                </button>
-                            </td>
+                    {currentReports.length > 0 ? (
+                        currentReports.map((report) => (
+                            <tr key={report.reportID}>
+                                <td>{report.month}</td>
+                                <td>{report.processor}</td>
+                                <td>
+                                    <button className="btn-view" onClick={() => handleView(report.reportID)}>
+                                        <FaEye />
+                                    </button>
+                                    <button className="btn-delete" onClick={() => handleDelete(report.reportID)}>
+                                        <FaTrash />
+                                    </button>
+                                </td>
+                            </tr>
+                        ))
+                    ) : (
+                        <tr>
+                            <td colSpan="3">No reports found</td>
                         </tr>
-                    ))}
+                    )}
                 </tbody>
             </table>
-            <div className="pagination">
-                {[...Array(Math.ceil(filteredReports.length / reportsPerPage)).keys()].map(number => (
-                    <button
-                        key={number + 1}
-                        onClick={() => paginate(number + 1)}
-                        className={currentPage === number + 1 ? 'active' : ''}
-                    >
-                        {number + 1}
-                    </button>
-                ))}
-            </div>
+            {filteredReports.length > reportsPerPage && (
+                <div className="pagination">
+                    {[...Array(Math.ceil(filteredReports.length / reportsPerPage)).keys()].map(number => (
+                        <button
+                            key={number + 1}
+                            onClick={() => paginate(number + 1)}
+                            className={currentPage === number + 1 ? 'active' : ''}
+                        >
+                            {number + 1}
+                        </button>
+                    ))}
+                </div>
+            )}
         </div>
     );
 };
