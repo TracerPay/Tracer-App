@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { updateUser } from '../../api/users.api';
+import { updateUser, getUser } from '../../api/users.api';
 import './user-settings.component.css';
 
-const UserSettings = ({ organizationID, username, email, onUpdateProfile, onChangePassword, isAdmin }) => {
+const UserSettings = ({ authToken, organizationID, username, isAdmin }) => {
   const [newUsername, setNewUsername] = useState(username);
-  const [newEmail, setNewEmail] = useState(email);
+  const [newEmail, setNewEmail] = useState('');
   const [currentPassword, setCurrentPassword] = useState('');
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
@@ -13,22 +13,43 @@ const UserSettings = ({ organizationID, username, email, onUpdateProfile, onChan
   const [showManageTeam, setShowManageTeam] = useState(isAdmin);
 
   useEffect(() => {
+    const fetchUserData = async () => {
+      try {
+        const user = await getUser(organizationID, username, authToken);
+        setNewEmail(user.email);
+        setNewUsername(user.username); // Update username as well in case it changes
+      } catch (error) {
+        console.error('Error fetching user data: ', error);
+      }
+    };
+
+    fetchUserData();
+
     // Ensure showManageTeam gets updated as soon as isAdmin changes
     setShowManageTeam(isAdmin);
-  }, [isAdmin]);
+  }, [isAdmin, organizationID, username, authToken]);
 
-  const handleProfileUpdate = () => {
-    onUpdateProfile(newUsername, newEmail);
+  const handleProfileUpdate = async () => {
     const updatedUser = {
       username: newUsername,
       email: newEmail,
     };
-    updateUser(username, updatedUser);
+    try {
+      await updateUser(organizationID, username, updatedUser, authToken);
+      alert('Profile updated successfully');
+    } catch (error) {
+      console.error('Error updating profile: ', error);
+    }
   };
 
-  const handleChangePassword = () => {
+  const handleChangePassword = async () => {
     if (newPassword === confirmPassword) {
-      onChangePassword(currentPassword, newPassword);
+      try {
+        await updateUser(organizationID, username, { password: newPassword }, authToken);
+        alert('Password updated successfully');
+      } catch (error) {
+        console.error('Error changing password: ', error);
+      }
     } else {
       alert('Passwords do not match!');
     }

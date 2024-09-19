@@ -21,7 +21,7 @@ const handleSubmit = async (e) => {
     navigate('/dashboard'); // Redirect to the dashboard after login
   } catch (error) {
     console.error('Login failed:', error); // Add this line
-    setError('Login failed. Please check your credentials.');
+    setError(`Login failed: ${error.message}`); // Update error message
   }
 };
 

@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
 import { jwtDecode } from 'jwt-decode'; // Ensure correct import
-import Sidebar from './components/sidebar/sidebar.component.js';
-import Footer from './components/footer/footer.component.js';
+// layout components
+import Sidebar from './layouts/sidebar/sidebar.layout.js';
+import Footer from './layouts/footer/footer.layout.js';
+// page components
 import Login from './components/login/login.component.js';
 import Signup from './components/signup/signup.component.js';
 import Dashboard from './components/dashboard/dash.component.js';
@@ -64,7 +66,7 @@ function App() {
                 <Route path="/billing-reports" element={<BillingReports authToken={authToken} organizationID={organizationID} />} />
                 <Route path="/ar-reports" element={<ARReports authToken={authToken} organizationID={organizationID} />} />
                 <Route path="/report/:reportID" element={<ReportViewer authToken={authToken} reportType="billing" />} />
-                <Route path='/user-settings/:username' element={<UserSettings organizationID={organizationID} username={username} authToken={authToken} isAdmin={isAdmin} />} />
+                <Route path='/user-settings/:username' element={<UserSettings authToken={authToken} organizationID={organizationID} username={username} isAdmin={isAdmin} />} />
                 <Route path="/manage-team" element={<ManageTeam authToken={authToken} organizationID={organizationID} />} />
 
               </>

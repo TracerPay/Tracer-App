@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import './sidebar.component.css';
+import './sidebar.layout.css';
 import { FaHome, FaFileAlt, FaChevronDown, FaCog } from 'react-icons/fa';
 import { AiFillDashboard } from "react-icons/ai";
 

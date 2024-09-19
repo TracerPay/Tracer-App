@@ -65,6 +65,11 @@ const BillingReports = ({ authToken, organizationID }) => {
             console.error('Error deleting report:', error);
         }
     };
+    
+  // Function to navigate to the report upload component
+  const handleUploadClick = () => {
+    navigate('/upload-report');
+  };
 
     // Pagination logic
     const indexOfLastReport = currentPage * reportsPerPage;
@@ -81,9 +86,7 @@ const BillingReports = ({ authToken, organizationID }) => {
         <div className="billing-reports">
             <div className="header">
                 <h2>Billing Reports</h2>
-                <Link to="/upload-report" className="btn-upload">
-                    Upload Report
-                </Link>
+                <button onClick={handleUploadClick}>Go to Report Upload</button> {/* Button to navigate to upload */}
             </div>
             <div className="filters">
                 <select value={filterMonth} onChange={(e) => setFilterMonth(e.target.value)}>

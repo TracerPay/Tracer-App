@@ -10,38 +10,48 @@ const Dashboard = ({ organizationID, username, authToken }) => {
   const [loading, setLoading] = useState(true); // Loading state
   const navigate = useNavigate();
 
-  useEffect(() => {
-    const fetchReports = async () => {
-      const fetchedReports = await getReports(organizationID, 'ar', authToken);
-  
-      if (fetchedReports.length > 0) {
-        // Find the most recent report based on the 'month' field
-        const mostRecentReport = fetchedReports.reduce((latest, current) => {
-          const currentDate = new Date(current.month);
-          const latestDate = new Date(latest.month);
-          return currentDate > latestDate ? current : latest;
-        });
-  
-        // Calculate total transactions and total billed
-        const totalTransactions = mostRecentReport.reportData.reduce((acc, row) => acc + row.lineItemQuantity, 0);
-        const totalBilled = parseFloat(
-          mostRecentReport.reportData.reduce((acc, row) => acc + parseFloat(row.lineItemPrice), 0).toFixed(2)
-        );
-  
-        // Update state with the most recent report's metrics and month
-        setRecentTransactions(totalTransactions);
-        setRecentBilled(totalBilled);
-        setReportMonth(mostRecentReport.month);
+  const fetchReports = async () => {
+    setLoading(true); // Reset the loading state
+    const fetchedReports = await getReports(organizationID, 'ar', authToken);
+    if (fetchedReports.length > 0) {
+      const mostRecentReport = fetchedReports.reduce((latest, current) => {
+        const currentDate = new Date(current.month);
+        const latestDate = new Date(latest.month);
+        return currentDate > latestDate ? current : latest;
+      });
 
-        // Store the data in localStorage to persist across navigation
-        localStorage.setItem('recentTransactions', totalTransactions);
-        localStorage.setItem('recentBilled', totalBilled);
-        localStorage.setItem('reportMonth', mostRecentReport.month);
-      }
-      setLoading(false); // Stop loading after fetching
-    };
-  
+      const totalTransactions = mostRecentReport.reportData.reduce((acc, row) => acc + row.lineItemQuantity, 0);
+      const totalBilled = parseFloat(
+        mostRecentReport.reportData.reduce((acc, row) => acc + parseFloat(row.lineItemPrice), 0).toFixed(2)
+      );
+
+      setRecentTransactions(totalTransactions);
+      setRecentBilled(totalBilled);
+      setReportMonth(mostRecentReport.month);
+
+      localStorage.setItem('recentTransactions', totalTransactions);
+      localStorage.setItem('recentBilled', totalBilled);
+      localStorage.setItem('reportMonth', mostRecentReport.month);
+    }
+    setLoading(false);
+  };
+
+  useEffect(() => {
     fetchReports();
+  }, [authToken, organizationID]);
+
+  useEffect(() => {
+    const recentTransactionsStored = localStorage.getItem('recentTransactions');
+    const recentBilledStored = localStorage.getItem('recentBilled');
+    const reportMonthStored = localStorage.getItem('reportMonth');
+    
+    if (recentTransactionsStored && recentBilledStored && reportMonthStored) {
+      setRecentTransactions(parseInt(recentTransactionsStored, 10));
+      setRecentBilled(parseFloat(recentBilledStored));
+      setReportMonth(reportMonthStored);
+    } else {
+      fetchReports();
+    }
   }, [authToken, organizationID]);
 
   // Function to navigate to the report upload component

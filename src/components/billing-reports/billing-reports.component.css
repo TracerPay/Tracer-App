@@ -41,3 +41,13 @@
 .btn-delete {
     color: red;
 }
+
+button {
+    padding: 12px 20px;
+    border-radius: 4px;
+    background-color: var(--accent-color);
+    color: white;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
