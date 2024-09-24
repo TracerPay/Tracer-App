@@ -57,6 +57,8 @@ function Signup() {
         username,
         password,
       };
+      console.log('user', user);
+      console.log('calling signup');
       const response = await signup(user);
       if (response.isDupe) {
         setError('Sorry, that Username already exists');

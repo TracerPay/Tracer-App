@@ -11,6 +11,7 @@ const Login = ({ setUsername, setAuthToken }) => {
 const handleSubmit = async (e) => {
   e.preventDefault();
   try {
+    console.log('starting login');
     const { token } = await login(localUsername, password);
     localStorage.setItem('authToken', token);
     localStorage.setItem('username', localUsername);

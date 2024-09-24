@@ -37,21 +37,33 @@ function App() {
         handleLogout();
       }
     }
-  }, []);
+  }, [authToken]);
 
   const handleLogout = () => {
+    // Clear authentication-related data
     localStorage.removeItem('authToken');
     localStorage.removeItem('username');
+
+    // Clear organization-specific stats and organization ID
+    if (organizationID) {
+      localStorage.removeItem(`recentTransactions_${organizationID}`);
+      localStorage.removeItem(`recentBilled_${organizationID}`);
+      localStorage.removeItem(`reportMonth_${organizationID}`);
+      localStorage.removeItem('organizationID');
+    }
+
+    // Reset state variables
     setUsername(null);
     setIsAdmin(false);
     setAuthToken(null);
+    setOrganization(null);
   };
 
   return (
     <Router>
       <div className="app-container">
         {username && <Sidebar username={username} isAdmin={isAdmin} onLogout={handleLogout} />}
-        <div className="main-content-wrapper"> {/* Added class to ensure sidebar compatibility */}
+        <div className="main-content-wrapper">
           <Routes>
             <Route
               path="/"
@@ -68,7 +80,6 @@ function App() {
                 <Route path="/report/:reportID" element={<ReportViewer authToken={authToken} reportType="billing" />} />
                 <Route path='/user-settings/:username' element={<UserSettings authToken={authToken} organizationID={organizationID} username={username} isAdmin={isAdmin} />} />
                 <Route path="/manage-team" element={<ManageTeam authToken={authToken} organizationID={organizationID} />} />
-
               </>
             ) : (
               <Route path="*" element={<Navigate to="/" />} />

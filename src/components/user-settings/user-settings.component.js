@@ -10,7 +10,7 @@ const UserSettings = ({ authToken, organizationID, username, isAdmin }) => {
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [isChangePasswordVisible, setIsChangePasswordVisible] = useState(false);
-  const [showManageTeam, setShowManageTeam] = useState(isAdmin);
+  const [showManageTeam, setShowManageTeam] = useState(isAdmin); // Initialize with isAdmin
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -24,10 +24,12 @@ const UserSettings = ({ authToken, organizationID, username, isAdmin }) => {
     };
 
     fetchUserData();
+  }, [organizationID, username, authToken]);
 
-    // Ensure showManageTeam gets updated as soon as isAdmin changes
-    setShowManageTeam(isAdmin);
-  }, [isAdmin, organizationID, username, authToken]);
+  // Ensure showManageTeam gets updated as soon as isAdmin changes
+  useEffect(() => {
+    setShowManageTeam(isAdmin); // Update showManageTeam based on the latest value of isAdmin
+  }, [isAdmin]);
 
   const handleProfileUpdate = async () => {
     const updatedUser = {

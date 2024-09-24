@@ -10,6 +10,12 @@ const Dashboard = ({ organizationID, username, authToken }) => {
   const [loading, setLoading] = useState(true); // Loading state
   const navigate = useNavigate();
 
+  const clearLocalStorage = () => {
+    localStorage.removeItem('recentTransactions');
+    localStorage.removeItem('recentBilled');
+    localStorage.removeItem('reportMonth');
+  };
+
   const fetchReports = async () => {
     setLoading(true); // Reset the loading state
     const fetchedReports = await getReports(organizationID, 'ar', authToken);
@@ -32,27 +38,33 @@ const Dashboard = ({ organizationID, username, authToken }) => {
       localStorage.setItem('recentTransactions', totalTransactions);
       localStorage.setItem('recentBilled', totalBilled);
       localStorage.setItem('reportMonth', mostRecentReport.month);
+    } else {
+      // Clear stats if no reports found
+      clearLocalStorage();
+      setRecentTransactions(null);
+      setRecentBilled(null);
+      setReportMonth(null);
     }
     setLoading(false);
   };
 
   useEffect(() => {
-    fetchReports();
-  }, [authToken, organizationID]);
-
-  useEffect(() => {
+    // Check localStorage first for existing stats
     const recentTransactionsStored = localStorage.getItem('recentTransactions');
     const recentBilledStored = localStorage.getItem('recentBilled');
     const reportMonthStored = localStorage.getItem('reportMonth');
     
     if (recentTransactionsStored && recentBilledStored && reportMonthStored) {
+      // If stored values exist, use them
       setRecentTransactions(parseInt(recentTransactionsStored, 10));
       setRecentBilled(parseFloat(recentBilledStored));
       setReportMonth(reportMonthStored);
+      setLoading(false); // Since we have data, stop loading
     } else {
+      // If no data is stored, fetch the reports
       fetchReports();
     }
-  }, [authToken, organizationID]);
+  }, [authToken, organizationID]); // Fetch data when token or organization changes
 
   // Function to navigate to the report upload component
   const handleUploadClick = () => {

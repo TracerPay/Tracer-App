@@ -1,4 +1,3 @@
-// src/components/manage-team/manage-team.component.js
 import React, { useState, useEffect } from 'react';
 import './manage-team.component.css';
 import { getUsers, createUser, deleteUser, updateUser } from '../../api/users.api';
@@ -7,7 +6,7 @@ import { FaPlus, FaPencilAlt, FaTrashAlt } from 'react-icons/fa';
 const ManageTeam = ({ authToken, organizationID }) => {
   const [users, setUsers] = useState([]);
   const [newUser, setNewUser] = useState({ fName: '', lName: '', email: '' });
-  const [newUserCredentials, setNewUserCredentials] = useState(null);
+  const [newUserCredentials, setNewUserCredentials] = useState(null); // Stores the new user credentials
   const [editingUser, setEditingUser] = useState(null);
   const [isPopupOpen, setIsPopupOpen] = useState(false);
   const [loading, setLoading] = useState(true);
@@ -34,7 +33,7 @@ const ManageTeam = ({ authToken, organizationID }) => {
     try {
       const response = await createUser(organizationID, newUser, authToken);
       setNewUser({ fName: '', lName: '', email: '' });
-      setNewUserCredentials(response);
+      setNewUserCredentials(response); // Store the credentials after creation
       fetchUsers();
       setIsPopupOpen(false);
     } catch (error) {
@@ -74,6 +73,7 @@ const ManageTeam = ({ authToken, organizationID }) => {
   const openAddPopup = () => {
     setEditingUser(null);
     setIsPopupOpen(true);
+    setNewUserCredentials(null); // Clear any previous credentials
   };
 
   return (
@@ -173,6 +173,16 @@ const ManageTeam = ({ authToken, organizationID }) => {
             </button>
           </div>
         </>
+      )}
+
+      {/* New User Credentials Popup */}
+      {newUserCredentials && (
+        <div className="credentials-popup">
+          <h3>New User Credentials</h3>
+          <p><strong>Username:</strong> {newUserCredentials.username}</p>
+          <p><strong>Password:</strong> {newUserCredentials.password}</p>
+          <button onClick={() => setNewUserCredentials(null)}>Close</button>
+        </div>
       )}
     </div>
   );
