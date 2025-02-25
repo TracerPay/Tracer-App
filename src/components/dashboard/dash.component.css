@@ -1,115 +1,111 @@
-.dashboard-container {
-  padding: 20px;
-  background-color: var(--section-background);
-  color: var(--text-color);
-  border-radius: 8px;
-  box-shadow: 0 0 10px var(--shadow-color);
-  box-sizing: border-box;
-}
-
-.dashboard-container h1 {
-  font-size: 2rem;
-  margin-bottom: 20px;
-}
-
-.metrics-section {
+/* Flexbox to align the tables side by side */
+.reports-section {
   display: flex;
   justify-content: space-between;
-  margin-bottom: 20px;
-  gap: 20px; /* Adds equal spacing between metric blocks */
+  gap: 20px;
+  flex-wrap: wrap; /* Allow wrapping if containers overflow */
 }
 
-.metric {
-  background-color: var(--background-color);
-  border-radius: 8px;
-  padding: 20px;
-  box-shadow: 0 0 10px var(--shadow-color);
+.table-container {
   flex: 1;
-  text-align: center;
+  min-width: 200px;
+  max-width: 45%;
+  background-color: var(--background-color);
+  padding: 10px;
+  border-radius: 8px;
+  box-shadow: 0 0 10px var(--shadow-color);
+  overflow-x: auto;
 }
 
-.metric h3 {
-  margin-bottom: 10px;
-  font-size: 1.4rem;
+/* Styling for tables */
+.table-container table {
+  width: 100%;
+  border-collapse: collapse;
 }
 
-.metric p {
-  font-size: 1.8rem;
-  font-weight: bold;
+.table-container th,
+.table-container td {
+  text-align: left;
+  padding: 6px;
+  border-bottom: 1px solid var(--separator-color);
+  word-wrap: break-word;
+}
+
+.table-container th {
+  font-size: 0.9rem;
+  text-transform: uppercase;
   color: var(--accent-color);
 }
 
-.upload-section {
-  background-color: var(--background-color);
-  border-radius: 8px;
-  padding: 20px;
-  box-shadow: 0 0 10px var(--shadow-color);
-  margin-bottom: 20px;
-  text-align: center;
+.table-container td {
+  font-size: 0.85rem;
 }
 
-.upload-section h2 {
-  margin-bottom: 15px;
-  font-size: 1.6rem;
-}
-
-.upload-section button {
-  padding: 12px 20px;
-  border-radius: 4px;
+.table-container button {
+  padding: 6px 10px;
   background-color: var(--accent-color);
-  color: white;
   border: none;
+  border-radius: 5px;
+  color: white;
   cursor: pointer;
   transition: background-color 0.3s ease;
 }
 
-
-
-.upload-section p {
-  margin-top: 10px;
-  font-style: italic;
-  color: var(--accent-color);
+.table-container button:hover {
+  background-color: #ff9800;
 }
 
-.reports-section {
-  background-color: var(--background-color);
-  border-radius: 8px;
-  padding: 20px;
-  box-shadow: 0 0 10px var(--shadow-color);
-  margin-bottom: 20px;
-}
-
-.reports-section h2 {
-  margin-bottom: 15px;
-  font-size: 1.6rem;
-}
-
-.reports-section ul {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-}
-
-.reports-section li {
-  padding: 12px;
-  border-bottom: 1px solid var(--separator-color);
+/* Upload button container */
+.button-container {
   display: flex;
-  align-items: center;
+  justify-content: center;
+  margin-top: 20px;
 }
 
-.reports-section li:last-child {
-  border-bottom: none;
-}
-
-.reports-section li:hover {
-  background-color: var(--section-background);
+.button-container button {
+  padding: 8px 18px;
+  background-color: var(--accent-color);
+  border: none;
+  border-radius: 5px;
+  color: white;
+  cursor: pointer;
   transition: background-color 0.3s ease;
 }
 
-.reports-section a {
-  text-decoration: none;
-  color: var(--accent-color);
-  flex-grow: 1;
+.button-container button:hover {
+  background-color: #ffa500;
 }
 
+/* Message container for when reports are already approved */
+.message-container {
+  text-align: center;
+  font-size: 1rem;
+  color: var(--text-color);
+}
 
+/* Tablet Responsiveness */
+@media (max-width: 1024px) {
+  /* Stack tables into one column on tablets */
+  .reports-section {
+    flex-direction: column;
+    gap: 15px;
+  }
+
+  .table-container {
+    max-width: 100%; /* Take full width on tablets */
+  }
+
+  /* Button adjustments for tablets */
+  .table-container button,
+  .button-container button {
+    font-size: 0.9rem;
+    padding: 8px 14px;
+  }
+
+  /* Adjust text and padding for tables on tablets */
+  .table-container th,
+  .table-container td {
+    font-size: 0.85rem;
+    padding: 8px;
+  }
+}
