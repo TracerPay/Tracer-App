@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { updateUser, getUser } from '../../api/users.api';
+import { updateUser, getUser } from '../../../src copy/api/users.api';
 import './user-settings.component.css';
 
-const UserSettings = ({ authToken, organizationID, username, isAdmin }) => {
+const UserSettings = ({ authToken, organizationID, username, setUsername, isAdmin }) => {
   const [newUsername, setNewUsername] = useState(username);
   const [newEmail, setNewEmail] = useState('');
   const [currentPassword, setCurrentPassword] = useState('');
@@ -37,6 +37,8 @@ const UserSettings = ({ authToken, organizationID, username, isAdmin }) => {
       email: newEmail,
     };
     try {
+      setUsername(newUsername); // Update username in case it changes
+      setNewEmail(newEmail); // Update email in case it changes
       await updateUser(organizationID, username, updatedUser, authToken);
       alert('Profile updated successfully');
     } catch (error) {

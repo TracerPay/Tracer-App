@@ -3,9 +3,9 @@ import './agent-viewer.page.css';
 import { useParams } from 'react-router-dom';
 
 // Import components
-import AgentDetails from '../../../components/agents/agent-details/agent-details.component';
-import AgentMerchants from '../../../components/agents/agent-merchants/agent-merchants.component';
-import PartnerMerchants from '../../../components/agents/partner-merchants/partner-merchants.component';
+import AgentDetails from '../../../../src copy/components2/agents/agent-details/agent-details.component';
+import AgentMerchants from '../../../../src copy/components2/agents/agent-merchants/agent-merchants.component';
+import PartnerMerchants from '../../../../src copy/components2/agents/partner-merchants/partner-merchants.component';
 import { getAgent, updateAgent } from '../../../api/agents.api';
 
 const AgentViewerPage = ({ organizationID, authToken }) => {
