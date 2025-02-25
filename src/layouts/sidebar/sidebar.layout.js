@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import './sidebar.layout.css';
-import { FaHome, FaFileAlt, FaChevronDown, FaCog } from 'react-icons/fa';
+import { FaHome, FaFileAlt, FaChevronDown, FaCog, FaUserTie } from 'react-icons/fa';
 import { AiFillDashboard } from "react-icons/ai";
 
 const Sidebar = ({ username, isAdmin, onLogout }) => {
@@ -9,6 +9,8 @@ const Sidebar = ({ username, isAdmin, onLogout }) => {
   const [isHovered, setIsHovered] = useState(false);
   const [isReportsOpen, setIsReportsOpen] = useState(false); // State for reports dropdown
   const [theme, setTheme] = useState(localStorage.getItem('theme') || 'light');
+  
+  const location = useLocation(); // Get the current location
 
   useEffect(() => {
     document.body.setAttribute('data-theme', theme);
@@ -27,6 +29,11 @@ const Sidebar = ({ username, isAdmin, onLogout }) => {
     setIsReportsOpen(!isReportsOpen);
   };
 
+  // Close the mobile menu when the location changes
+  useEffect(() => {
+    setIsMobileMenuOpen(false);
+  }, [location]);
+
   return (
     <>
       <div className={`sidebar ${isMobileMenuOpen ? 'open' : ''} ${isHovered ? 'hovered' : ''}`}
@@ -43,6 +50,21 @@ const Sidebar = ({ username, isAdmin, onLogout }) => {
             <AiFillDashboard className="nav-icon" />
             <span className="nav-text">Dash</span>
           </Link>
+          {/* Add Agents Nav Item 
+          <Link to="/merchants" onClick={toggleMobileMenu}>
+            <FaUserTie className="nav-icon" />
+            <span className="nav-text">Merchants</span>
+          </Link>*/}
+          {/* Add Merchants Nav Item */}
+          <Link to="/agents" onClick={toggleMobileMenu}>
+            <FaUserTie className="nav-icon" />
+            <span className="nav-text">Agents</span>
+          </Link>
+          <Link to="/reports/all" onClick={toggleMobileMenu}>
+            <FaFileAlt className="nav-icon" />
+            <span className="nav-text">Reports</span>
+          </Link>
+          {/*}
           <div className="dropdown" onClick={toggleReportsDropdown}>
             <div className="dropdown-toggle">
               <FaFileAlt className="nav-icon" />
@@ -51,15 +73,19 @@ const Sidebar = ({ username, isAdmin, onLogout }) => {
             </div>
             {isReportsOpen && (
               <div className="dropdown-menu">
-                <Link to="/billing-reports" onClick={toggleMobileMenu} className="dropdown-item">
+                <Link to="/reports/billing" className="dropdown-item">
                   Billing Reports
                 </Link>
-                <Link to="/ar-reports" onClick={toggleMobileMenu} className="dropdown-item">
+                <Link to="/reports/ar" className="dropdown-item">
                   AR Reports
+                </Link>
+                <Link to="/reports/processor" className="dropdown-item">
+                  Processor Reports
                 </Link>
               </div>
             )}
           </div>
+              */}
         </nav>
         <div className="sidebar-footer">
           {username ? (

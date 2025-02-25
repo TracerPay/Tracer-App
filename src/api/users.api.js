@@ -1,6 +1,7 @@
 import axios from 'axios';
 
-const API_BASE_URL = process.env.REACT_APP_BASE_URL; // Update this to your API's base URL
+const BASE_URL = process.env.NODE_ENV === 'production' ? process.env.REACT_APP_PROD_URL : process.env.REACT_APP_DEV_URL;
+const ROUTE_BASE_URL = `${BASE_URL}/api/v2/reports`; // Ensure this is set in your .env file
 
 // Fetch user details by organizationID and username
 export const getUsers = async (organizationID, authToken) => {
@@ -8,7 +9,7 @@ export const getUsers = async (organizationID, authToken) => {
         const headers = {
             Authorization: `Bearer ${authToken}`,
         };
-        const response = await axios.get(`${API_BASE_URL}/users/organizations/${organizationID}`, { headers });
+        const response = await axios.get(`${ROUTE_BASE_URL}/organizations/${organizationID}`, { headers });
         console.log('Users:', response.data);
         return response.data;
     } catch (error) {
@@ -22,7 +23,7 @@ export const getUser = async (organizationID, username, authToken) => {
     const headers = {
       Authorization: `Bearer ${authToken}`,
     };
-    const response = await axios.get(`${API_BASE_URL}/users/organizations/${organizationID}/${username}`, { headers });
+    const response = await axios.get(`${ROUTE_BASE_URL}/organizations/${organizationID}/${username}`, { headers });
     console.log("User Details:", response.data);
     return response.data;
   } catch (error) {
@@ -37,7 +38,7 @@ export const createUser = async (organizationID, userData, authToken) => {
     const headers = {
       Authorization: `Bearer ${authToken}`,
     };
-    const response = await axios.post(`${API_BASE_URL}/users/organizations/${organizationID}`, userData, { headers });
+    const response = await axios.post(`${ROUTE_BASE_URL}/organizations/${organizationID}`, userData, { headers });
     console.log("User Created:", response.data);
     return response.data;
   } catch (error) {
@@ -52,7 +53,7 @@ export const updateUser = async (organizationID, username, userData, authToken) 
     const headers = {
       Authorization: `Bearer ${authToken}`,
     };
-    const response = await axios.put(`${API_BASE_URL}/users/organizations/${organizationID}/${username}`, userData, { headers });
+    const response = await axios.put(`${ROUTE_BASE_URL}/organizations/${organizationID}/${username}`, userData, { headers });
     console.log("User Updated:", response.data);
     return response.data;
   } catch (error) {
@@ -67,7 +68,7 @@ export const deleteUser = async (organizationID, username, authToken) => {
     const headers = {
       Authorization: `Bearer ${authToken}`,
     };
-    const response = await axios.delete(`${API_BASE_URL}/users/organizations/${organizationID}/${username}`, { headers });
+    const response = await axios.delete(`${ROUTE_BASE_URL}/organizations/${organizationID}/${username}`, { headers });
     console.log("User Deleted:", response.data);
     return response.data;
   } catch (error) {

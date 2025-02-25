@@ -12,7 +12,7 @@ const Footer = () => {
       </div>
       <div className="footer-bottom">
         <p>&copy; {new Date().getFullYear()} Tracer. All rights reserved.</p>
-        <p>Built by <a href="www.crittercodes.com">CritterCodes</a></p>
+        <p>Built by <a href="https://www.crittercodes.com">CritterCodes</a></p>
       </div>
     </footer>
   );

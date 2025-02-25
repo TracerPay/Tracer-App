@@ -1,18 +1,18 @@
 .footer {
-    background: linear-gradient(45deg, #0f2027, #203a43, #2c5364);
-    color: #ffffff;
+    background-color: var(--section-background); /* Use section background for consistency in both themes */
+    color: var(--text-color); /* Use text color from theme */
     padding: 40px 20px;
     text-align: center;
     position: relative;
-    width: calc(100% - 70px); /* Adjust width to account for collapsed sidebar */
-    margin-left: 70px; /* Offset the footer by the width of the collapsed sidebar */
+    width: calc(100% - var(--sidebar-closed-width)); /* Adjust width based on collapsed sidebar */
+    margin-left: var(--sidebar-closed-width); /* Offset the footer by the width of the collapsed sidebar */
     box-sizing: border-box; /* Ensure padding doesn't add to the width */
     transition: margin-left 0.3s ease, width 0.3s ease; /* Smooth transition when sidebar expands */
 }
 
-.sidebar.hovered + .footer {
-    width: calc(100% - 250px); /* Adjust width when sidebar is expanded */
-    margin-left: 250px; /* Offset the footer by the width of the expanded sidebar */
+.sidebar.open + .footer {
+    width: calc(100% - var(--sidebar-width)); /* Adjust width when sidebar is expanded */
+    margin-left: var(--sidebar-width); /* Offset the footer by the width of the expanded sidebar */
 }
 
 .footer-content {
@@ -26,7 +26,7 @@
 .footer-logo h2 {
     font-size: 1.5rem;
     margin-bottom: 20px;
-    color: #fff;
+    color: var(--text-color); /* Use the theme's text color */
 }
 
 .footer-links {
@@ -37,7 +37,7 @@
 }
 
 .footer-links a {
-    color: #ffffff;
+    color: var(--text-color); /* Use the theme's text color */
     margin: 5px 15px;
     text-decoration: none;
     font-weight: 500;
@@ -45,7 +45,7 @@
 }
 
 .footer-links a:hover {
-    color: #76c7c0;
+    color: var(--accent-color2); /* Accent color on hover */
 }
 
 .footer-socials {
@@ -55,21 +55,21 @@
 }
 
 .footer-socials a {
-    color: #ffffff;
+    color: var(--text-color); /* Use the theme's text color */
     margin: 0 15px;
     font-size: 1.5rem;
     transition: transform 0.3s ease, color 0.3s ease;
 }
 
 .footer-socials a:hover {
-    color: #76c7c0;
+    color: var(--accent-color); /* Accent color on hover */
     transform: scale(1.2);
 }
 
 .footer-bottom {
     margin-top: 20px;
     font-size: 0.9rem;
-    color: #bbbbbb;
+    color: var(--text-color); /* Use the theme's text color */
 }
 
 .footer-bottom p {
